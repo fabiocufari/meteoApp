@@ -17,6 +17,7 @@ export class MainComponent {
   wServ = inject(WeatherService)
   
   protected weatherData$=this.wServ.weatherData$
+  
 
   ngOnInit() {
      

@@ -12,6 +12,7 @@
     </div>
 
     @if(data | async; as weatherData ){
+
     <div class="hourly">
         @for (item of weatherData ; track item) {
         @if(threeHoursMode){
@@ -35,7 +36,7 @@
     </div>
     }
     @else {
-    <p>Loader</p>
+    <app-loader></app-loader>
     }
 
 

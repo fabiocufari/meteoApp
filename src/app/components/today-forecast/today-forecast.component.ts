@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { Observable } from 'rxjs';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { AdjustHourPipe } from '../../pipes/adjust-hour.pipe';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-today-forecast',
   standalone: true,
-  imports: [AdjustHourPipe ,IconComponent,CommonModule],
+  imports: [AdjustHourPipe ,IconComponent,AsyncPipe,LoaderComponent],
   templateUrl: './today-forecast.component.html',
   styleUrl: './today-forecast.component.scss'
 })
