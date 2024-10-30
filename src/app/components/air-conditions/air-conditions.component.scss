@@ -1,0 +1,11 @@
+.loader {
+    display: flex;
+    justify-content: center; // Centra orizzontalmente
+    align-items: center; // Centra verticalmente
+    overflow: hidden; // Nasconde eventuali parti dell'immagine che escono dal div
+}
+
+img {
+    max-width: 100%; // Limita la larghezza massima dell'immagine al 100% del div
+    max-height: 100%; // Limita l'altezza massima dell'immagine al 100% del div
+}

@@ -1,0 +1,43 @@
+<div class="forecast-today">
+    <div class="header">
+        <h3>Today's Forecast</h3>
+        <!-- Toggle Switch -->
+         <div class="header">
+        <h6>1 Hour/3 Hours </h6>
+        <label class="toggle-switch">
+            <input type="checkbox"  (change)="toggleMode($event)">
+            <span class="slider"></span>
+        </label>
+        </div> 
+    </div>
+
+    @if(data | async; as weatherData ){
+    <div class="hourly">
+        @for (item of weatherData ; track item) {
+        @if(threeHoursMode){
+             @if(($index % 3 == 0)){
+            <div class="hour">
+                <p>{{ item.timestamp | adjustHour }}</p>
+                <app-icon [name]="getIconClass(item.icon)"></app-icon>
+                <p>{{item.temperature}} °</p>
+            </div>
+            }
+        }
+        @else {
+        <div class="hour">
+            <p>{{ item.timestamp | adjustHour }}</p>
+            <app-icon [name]="getIconClass(item.icon)"></app-icon>
+            <p>{{item.temperature}} °</p>
+        </div>
+
+        }
+        }
+    </div>
+    }
+    @else {
+    <p>Loader</p>
+    }
+
+
+
+</div>
