@@ -17,11 +17,11 @@ export class MainComponent {
   wServ = inject(WeatherService)
   
   protected weatherData$=this.wServ.weatherData$
-  
+  protected weatherDataCurrent$=this.wServ.weatherDataCurrent$
 
   ngOnInit() {
      
-    this.wServ.getWeather(41.902782, 12.496366)
+    this.wServ.loadWeatherData()
     
   }
 

@@ -1,8 +1,13 @@
 <div class="weather-info">
+    @if(data | async; as weatherData ){
     <div>
         <h1>Roma</h1>
-        <p>Chance of rain: 0%</p>
-        <div class="temperature">31°</div>
+        <p>Chance of rain: {{weatherData.precipitation_10}}%</p>
+        <div class="temperature">{{weatherData.temperature}}°</div>
     </div>
-    <app-icon name="wi-day-cloudy" size="large"></app-icon>
+    <app-icon [name]="getIconClass(weatherData.icon)" size="large"></app-icon>
+    }
+    @else {
+        <app-loader></app-loader>
+    }
 </div>

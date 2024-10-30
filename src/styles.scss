@@ -68,7 +68,19 @@ body {
         border-radius: 10px;
         width: 100%; // Si adatta all'intera larghezza della riga
         box-sizing: border-box;
-  
+        height: 200px;
+        opacity: 0; // Inizialmente invisibile
+        animation: fadeIn 2s forwards; // Applica l'animazione
+
+        // Keyframe animation for opacity
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
         h1 {
           font-size: 38px;
           margin: 0;

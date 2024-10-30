@@ -15,16 +15,28 @@ interface WeatherData {
 })
 export class WeatherService {
   // Definisce l'URL base per l'API di servizio meteo
-  private apiUrl = 'https://api.brightsky.dev/weather';
+  private apiUrl = 'https://api.brightsky.dev/';
 
   // Utilizza il nuovo `inject()` per l'inserimento delle dipendenze (Dependency Injection) in Angular 18+
   http = inject(HttpClient);
 
+  loadWeatherData() {
+    this.getWeather(41.902782, 12.496366)
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // c'e' un problema con le api current, non funzionano con le lat long italiane, devo capire perche'.
+    // Ho messo quelle di Berlino che sono funzionanti in modo da poter comunque lavorare
+    
+    this.getWeatherCurrent(50.52, 11.4)
+  }
+
+
+
   // Crea un BehaviorSubject per memorizzare i dati meteo, inizialmente impostato su null
   private weatherData = new BehaviorSubject<any>(null);
-
+  private weatherDataCurrent = new BehaviorSubject<any>(null);
   // Espone `weatherData` come Observable, permettendo ai componenti di sottoscriversi per ottenere i dati aggiornati
   public weatherData$: Observable<any> = this.weatherData.asObservable();
+  public weatherDataCurrent$: Observable<any> = this.weatherDataCurrent.asObservable();
 
   /**
    * Recupera i dati meteo basati su latitudine, longitudine e una data opzionale.
@@ -38,10 +50,10 @@ export class WeatherService {
     // Imposta la data di default a oggi se non fornita
     if (!date) {
       // Ottenere la data attuale e formattarla come yyyy/MM/dd
-    const today = new Date();
-    date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const today = new Date();
+      date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    
+
     }
 
     // Crea i parametri di query usando HttpParams
@@ -51,17 +63,42 @@ export class WeatherService {
       .set('date', date);
 
     // Effettua una richiesta GET all'API con i parametri specificati
-    this.http.get(this.apiUrl, { params }).subscribe({
+    this.http.get(this.apiUrl + 'weather', { params }).subscribe({
       // Gestione del caso di successo: aggiorna `weatherData` con i dati ricevuti
       next: (result: any) => {
-        
-        const filteredData = result.weather.map(({ temperature, timestamp, icon } : WeatherData) => ({
+
+        const filteredData = result.weather.map(({ temperature, timestamp, icon }: WeatherData) => ({
           temperature,
           timestamp,
           icon
         }));
 
         this.weatherData.next(filteredData); // Pubblica i nuovi dati meteo a tutti gli osservatori
+      },
+      // Gestione dell'errore: stampa l'errore in console per il debug
+      error: (error: any) => {
+        console.error(error);
+      }
+    });
+  }
+
+
+  getWeatherCurrent(lat: number, long: number): void {
+
+    // Crea i parametri di query usando HttpParams
+    const params = new HttpParams()
+      .set('lat', lat.toString())
+      .set('lon', long.toString())
+
+
+    // Effettua una richiesta GET all'API con i parametri specificati
+    this.http.get(this.apiUrl + 'current_weather', { params }).subscribe({
+      // Gestione del caso di successo: aggiorna `weatherData` con i dati ricevuti
+      next: (result: any) => {
+
+      
+
+        this.weatherDataCurrent.next(result.weather); // Pubblica i nuovi dati meteo a tutti gli osservatori
       },
       // Gestione dell'errore: stampa l'errore in console per il debug
       error: (error: any) => {
